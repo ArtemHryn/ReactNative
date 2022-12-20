@@ -1,130 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { useCallback, useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Dimensions,
-} from "react-native";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
+import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
+import { useRoute } from "./components/router";
 
-SplashScreen.preventAutoHideAsync();
-
-const image = { url: "https://rozetked.me/images/uploads/f2hNmZrdlBsD.png" };
-
-const initialState = { email: "", password: "" };
 
 export default function App() {
-  const [focus, setFocus] = useState(false);
-  const [state, setState] = useState(initialState);
-  const [dimensions, setDimensions] = useState(
-    () => Dimensions.get("window").width - 40 * 2
-  );
-  const [fontsLoaded] = useFonts({
-    PlayFair: require("./assets/fonts/PlayfairDisplay-Black.ttf"),
-  });
-
-  useEffect(() => {
-    const onChangeWidth = () => {
-      const width = Dimensions.get("window").width - 40 * 2;
-      setDimensions(width);
-    };
-
-    const screenWidth = Dimensions.addEventListener("change", onChangeWidth);
-    return () => screenWidth?.remove();
-  }, []);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  const onLogin = () => {
-    setFocus(false);
-    Keyboard.dismiss();
-    console.log(state);
-    setState(initialState);
-  };
-
-  const onTouchOutOfForm = () => {
-    Keyboard.dismiss();
-    setFocus(false);
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={onTouchOutOfForm}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <ImageBackground source={image} style={styles.image}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-          >
-            <View
-              style={{
-                ...styles.form,
-                marginBottom: focus ? 20 : 100,
-                width: dimensions
-              }}
-            >
-              <View style={styles.formHeader}>
-                <Text style={{ ...styles.headerTitle, fontFamily: "PlayFair" }}>
-                  Login
-                </Text>
-              </View>
-              <View style={{ marginBottom: 10 }}>
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                  style={styles.input}
-                  textAlign={"center"}
-                  onFocus={() => setFocus(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
-                  value={state.email}
-                />
-              </View>
-              <View>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                  style={styles.input}
-                  textAlign={"center"}
-                  secureTextEntry={true}
-                  onFocus={() => setFocus(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
-                  value={state.password}
-                />
-              </View>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.btn}
-                onPress={onLogin}
-              >
-                <Text>SEND</Text>
-              </TouchableOpacity>
-            </View>
-          </KeyboardAvoidingView>
-          <View style={styles.innerBox}>
-            <Text style={styles.text}>Test text</Text>
-          </View>
-          <StatusBar style="auto" />
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
-  );
+  const routing = useRoute(true);
+  return <NavigationContainer>{routing}</NavigationContainer>;
 }
 
 const styles = StyleSheet.create({
@@ -136,7 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     resizeMode: "cover",
-    alignItems: 'center'
+    alignItems: "center",
   },
   text: {
     color: "#b22222",

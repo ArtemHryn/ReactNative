@@ -35,39 +35,42 @@ export const useRoute = (isAuth) => {
       </Stack.Navigator>
     );
   }
-  return (
-    <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
-      <MainTab.Screen
-        name="Posts"
-        component={PostsScreen}
-        options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <MaterialCommunityIcons
-              name="postage-stamp"
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Create"
-        component={CreateScreen}
-        options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <Ionicons name="create-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="profile" size={size} color={color} />
-          ),
-        }}
-      />
-    </MainTab.Navigator>
-  );
+  if (isAuth) {
+    return (
+      <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+        <MainTab.Screen
+          name="PostsScreen"
+          component={PostsScreen}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ size, color }) => (
+              <MaterialCommunityIcons
+                name="postage-stamp"
+                size={32}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <MainTab.Screen
+          name="Create"
+          component={CreateScreen}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <Ionicons name="create-outline" size={32} color={color} />
+            ),
+          }}
+        />
+        <MainTab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <AntDesign name="profile" size={32} color={color} />
+            ),
+          }}
+        />
+      </MainTab.Navigator>
+    );
+}
 };
